@@ -33,7 +33,7 @@ g4 dw 10,13,"| ___ \| | | || '__| / _` | / _ \| '__|   / __| | |\/| | / _ \| '_ 
 g5 dw 10,13,"| |_/ /| |_| || |   | (_| ||  __/| |      \__ \ | |  | ||  __/| | | || |_| |$"
 g6 dw 10,13,"\____/  \__,_||_|    \__, | \___||_|      |___/ \_|  |_/ \___||_| |_| \__,_|$"
 g7 dw 10,13,"                      __/ |                                                 $"
-g8 dw 10,13,"                    |___/                                                   $"   
+g8 dw 10,13,"                     |___/                                                  $"   
 gl11 dw 10,13, "-------------------------------------------------------------------------$"
 gl12 dw 10,13, "|                                                                        |$"
 gl13 dw 10,13, "| 1.Kentunky Burger                                                      |$"
@@ -84,7 +84,7 @@ fm21 dw 10,13, "----------------------------------------------------------------
 
 
              
-total db 0
+total dw 0
             
 .code                  
                                                                       
@@ -434,27 +434,28 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,2
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp BurgerMenu
     ret
     AddBurger1 EndP
 
 AddBurger2 Proc
-       
         lea dx,gl20
 mov ah,9
 int 21h
@@ -462,21 +463,23 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,1
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp BurgerMenu
     ret
     AddBurger2 EndP
@@ -489,21 +492,23 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,3
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp BurgerMenu
     ret
     AddBurger3 EndP
@@ -516,23 +521,26 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,4
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp BurgerMenu
     ret
+
     AddBurger4 EndP
 
 AddShake1 Proc
@@ -543,27 +551,28 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,2
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp ShakeMenu
     ret
     AddShake1 EndP
 
 AddShake2 Proc
-       
         lea dx,gl20
 mov ah,9
 int 21h
@@ -571,24 +580,26 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,1
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp ShakeMenu
     ret
-    AddShake2 EndP
+        AddShake2 EndP
 
 AddShake3 Proc  
         lea dx,gl20
@@ -598,24 +609,26 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,3
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp ShakeMenu
     ret
-    AddShake3 EndP
+        AddShake3 EndP
 
 AddShake4 Proc  
         lea dx,gl20
@@ -625,24 +638,26 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,4
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp ShakeMenu
     ret
-    AddShake4 EndP
+        AddShake4 EndP
 
 AddFries1 Proc
         lea dx,gl20
@@ -652,106 +667,113 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,2
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp FriesMenu
     ret
-    AddFries1 EndP
+        AddFries1 EndP
 
 AddFries2 Proc
-       
-        lea dx,gl20
+lea dx,gl20
 mov ah,9
 int 21h
 lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,1
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp FriesMenu
     ret
-    AddFries2 EndP
+ AddFries2 EndP
 
 AddFries3 Proc  
-        lea dx,gl20
+lea dx,gl20
 mov ah,9
 int 21h
 lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,3
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
+int 21h
+ 
 jmp FriesMenu
-    ret
+    ret    
     AddFries3 EndP
 
 AddFries4 Proc  
-        lea dx,gl20
+lea dx,gl20
 mov ah,9
 int 21h
 lea dx,gl21
 mov ah,9
 int 21h
 
-    mov al,[total]
-    mov bl,4
-    add al,bl
-    add al,48 
-    mov total,al
+    mov ax,[total]
+    mov bx,5
+    add ax,bx
+    aaa
+    add ax,48 
+    mov total,ax
     lea dx,gl22
 mov ah,9
 int 21h
 
-mov dl,total
+mov dx,total
 mov ah,2
 int 21h
-mov dl,36
+mov dx,36
 mov ah,2
-int 21h 
-jmp FriesMenu
+int 21h
+ 
+jmp FriesMenu                                                      
     ret
-    AddFries4 EndP
+        AddFries4 EndP
 
 
 
