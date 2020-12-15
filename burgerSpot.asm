@@ -22,7 +22,8 @@ s12 dw 10,13, "| 1.Order Bugers                                            |$"
 s13 dw 10,13, "| 2.Order Shakes                                            |$"
 s14 dw 10,13, "| 3.Order Fries                                             |$"
 es15 dw 10,13,"| 4.Exclusive Discounted Combos                             |$"
-s15 dw 10,13, "| 5.Exit                                                    |$"
+es16 dw 10,13,"| 5.Generate Invoice                                        |$"
+s15 dw 10,13, "| 6.Exit                                                    |$"
 s16 dw 10,13, "|                                                           |$"
 s17 dw 10,13, "-------------------------------------------------------------$"
 s18 dw 10,13, "|Enter Option:$"
@@ -48,7 +49,7 @@ gl19 dw 10,13, "|Enter Option:$"
 gl20 dw "                                                         |$"
 gl21 dw 10,13, "-------------------------------------------------------------------------$"
 
-gl22 dw 10,13, "Your Total is:$"
+gl22 dw 10,13, "|Your Total is:$"
 sm1 dw 10,13," _____  _             _           _       ___  ___                   $"
 sm2 dw 10,13,"/  ___|| |           | |         ( )      |  \/  |                    $"
 sm3 dw 10,13,"\ `--. | |__    __ _ | | __  ___ |/  ___  | .  . |  ___  _ __   _   _ $"
@@ -104,41 +105,65 @@ edc19 dw 10,13, "|Enter Option:$"
 edc20 dw "                                                         |$"
 edc21 dw 10,13, "-------------------------------------------------------------------------$"
 
+inv1 dw 10,13," _____                 _          $"
+inv2 dw 10,13,"|_   _|               (_)         $"
+inv3 dw 10,13,"  | |  _ ____   _____  _  ___ ___ $"
+inv4 dw 10,13,"  | | | '_ \ \ / / _ \| |/ __/ _ \$"
+inv5 dw 10,13," _| |_| | | \ V / (_) | | (_|  __/$"
+inv6 dw 10,13,"|_____|_| |_|\_/ \___/|_|\___\___|$"
+inv7 dw 10,13,"----------------------------------------$"
+inv8 dw 10,13,"|                                      |$"
+inv9 dw 10,13,"|  Total Amount:$"   
+inv9a dw "                    |$"
+inv10 dw 10,13,"|  Qty of Items:$"
+inv10a dw "                      |$"
+inv11 dw 10,13,"|                                      |$"
+inv12 dw 10,13,"|                                      |$"
+inv13 dw 10,13,"|                                      |$"
+inv14 dw 10,13,"----------------------------------------$"
+inv15 dw 10,13,"Press any key to close......$"
+inv16 dw 10,13,"----------------------------------------$"                                                         
+                                                         
 
 NUM1 DB ?
 NUM2 DB ?
-TOTAL DB ?,"$"
+TOTAL DB ?,"$" 
+QTY DB 0
 
 
-str1 dw 10,13,"You have selected Kentunky Burger$"
-str2 dw 10,13,"You have selected Crunchos$"
-str3 dw 10,13,"You have selected Messy Meat$"
-str4 dw 10,13,"You have selected Lava Dip$"
+
+str1 dw 10,13,"|You have selected Kentunky Burger                                         |$"
+str2 dw 10,13,"|You have selected Crunchos                                                |$"
+str3 dw 10,13,"|You have selected Messy Meat                                              |$"
+str4 dw 10,13,"|You have selected Lava Dip                                                |$"
             
 
-str5 dw 10,13,"You have selected Oreo Shake$"
-str6 dw 10,13,"You have selected Kitkat Shake$"
-str7 dw 10,13,"You have selected Messy Chocolate Shake$"
-str8 dw 10,13,"You have selected Strawberry Shake$"
+str5 dw 10,13,"|You have selected Oreo Shake                                              |$"
+str6 dw 10,13,"|You have selected Kitkat Shake                                            |$"
+str7 dw 10,13,"|You have selected Messy Chocolate Shake                                   |$"
+str8 dw 10,13,"|You have selected Strawberry Shake                                        |$"
 
 
-str9 dw 10,13,"You have selected Classic Fries$"
-str10 dw 10,13,"You have selected Masala Fries$"
-str11 dw 10,13,"You have selected Nacho Cheese Fries$"
-str12 dw 10,13,"You have selected Pizza Fries$"
+str9 dw 10,13,"|You have selected Classic Fries                                           |$"
+str10 dw 10,13,"|You have selected Masala Fries                                           |$"
+str11 dw 10,13,"|You have selected Nacho Cheese Fries                                     |$"
+str12 dw 10,13,"|You have selected Pizza Fries                                            |$"
 
 
-str13 dw 10,13,"You have selected The Shack Pack (2 Crunchos and 2 Shakes)$"
-str14 dw 10,13,"You have selected Party on! (4 Classic Fries and 2 Shakes)$"
-str15 dw 10,13,"You have selected See ya later (1 Burger any and 1 shake any)$"
-str16 dw 10,13,"You have selected Peeza (3 Pizza Fries and 1 classic fries)$"
+str13 dw 10,13,"|You have selected The Shack Pack (2 Crunchos and 2 Shakes)                |$"
+str14 dw 10,13,"|You have selected Party on! (4 Classic Fries and 2 Shakes)                |$"
+str15 dw 10,13,"|You have selected See ya later (1 Burger any and 1 shake any)             |$"
+str16 dw 10,13,"|You have selected Peeza (3 Pizza Fries and 1 classic fries)               |$"
 
-str17 dw 10,13,"Exiting Menu....$"
-            
+str17 dw 10,13,"|Exiting Menu....                                                          |$"
+
+items dw 100 dup("$")
+
 .code                  
                                                                       
 Main Proc
 mov ax,@data
+mov ds,ax
 call mainMenu
 mov ah,4ch
 int 21h
@@ -197,6 +222,10 @@ lea dx,es15
 mov ah,9
 int 21h 
 
+lea dx,es16
+mov ah,9
+int 21h 
+
 
 lea dx,s15
 mov ah,9
@@ -230,7 +259,10 @@ MMinput Proc
     je FriesMenu
     cmp al,'4'
     je ComboMenu
-    cmp al,'5' 
+    cmp al,'5'
+    je InvoiceMenu
+    
+    cmp al,'6' 
         lea dx,str17
     mov ah,9
     int 21h
@@ -575,6 +607,95 @@ P4input Proc
     P4input EndP
 
 
+InvoiceMenu Proc
+    lea dx,inv1
+    mov ah,9
+    int 21h
+    lea dx,inv2
+    mov ah,9
+    int 21h
+    lea dx,inv3
+    mov ah,9
+    int 21h
+    lea dx,inv4
+    mov ah,9
+    int 21h
+    lea dx,inv5
+    mov ah,9
+    int 21h
+    lea dx,inv6
+    mov ah,9
+    int 21h
+    lea dx,inv7
+    mov ah,9
+    int 21h
+    lea dx,inv8
+    mov ah,9
+    int 21h
+    lea dx,inv9
+    mov ah,9
+    int 21h  
+    ;Total Goes here
+    MOV AH,2
+MOV DL,BH
+INT 21H
+MOV AH,2
+MOV DL,BL
+INT 21H 
+mov dx,36
+mov ah,2
+int 21h
+
+    lea dx,inv9a
+    mov ah,9
+    int 21h
+
+    
+    lea dx,inv10
+    mov ah,9
+    int 21h
+    ;QTY GOES HERE
+    mov dl,[QTY]
+    add dl,48
+    mov ah,2
+    int 21h
+    
+    lea dx,inv10a
+    mov ah,9
+    int 21h
+    
+    
+    lea dx,inv11
+    mov ah,9
+    int 21h
+    lea dx,inv12
+    mov ah,9
+    int 21h
+    lea dx,inv13
+    mov ah,9
+    int 21h
+    lea dx,inv14
+    mov ah,9
+    int 21h
+    lea dx,inv15
+    mov ah,9
+    int 21h
+    lea dx,inv16
+    mov ah,9
+    int 21h
+    mov ah,7
+    int 21h
+    lea dx,str17
+    mov ah,9
+    int 21h
+    jmp MainMenu
+    ret
+
+InvoiceMenu EndP
+
+
+
+
 
 AddBurger1 Proc
         lea dx,gl20
@@ -622,6 +743,12 @@ lea dx,str1
 mov ah,9
 int 21h
 
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
+    
+
+
 
 
  
@@ -665,6 +792,12 @@ int 21h
 lea dx,str2
 mov ah,9
 int 21h
+
+
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
+
  
 jmp BurgerMenu
     ret
@@ -706,6 +839,9 @@ int 21h
 lea dx,str3
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp BurgerMenu
     ret
@@ -747,6 +883,9 @@ int 21h
 lea dx,str4
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp BurgerMenu
     ret
@@ -789,6 +928,9 @@ int 21h
 lea dx,str5
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ShakeMenu
     ret
@@ -830,6 +972,9 @@ int 21h
 lea dx,str6
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ShakeMenu
     ret
@@ -872,6 +1017,9 @@ int 21h
 lea dx,str7
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ShakeMenu
     ret
@@ -914,6 +1062,9 @@ int 21h
 lea dx,str8
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ShakeMenu
     ret
@@ -955,6 +1106,9 @@ int 21h
 lea dx,str9
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp FriesMenu
     ret
@@ -996,6 +1150,9 @@ int 21h
 lea dx,str10
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp FriesMenu
     ret
@@ -1037,6 +1194,9 @@ int 21h
 lea dx,str11
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp FriesMenu
     ret    
@@ -1078,6 +1238,9 @@ int 21h
 lea dx,str12
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp FriesMenu                                                      
     ret
@@ -1120,6 +1283,9 @@ int 21h
 lea dx,str13
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ComboMenu
     ret
@@ -1161,6 +1327,9 @@ int 21h
 lea dx,str14
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ComboMenu
     ret
@@ -1202,6 +1371,9 @@ int 21h
 lea dx,str15
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ComboMenu
     ret    
@@ -1243,6 +1415,9 @@ int 21h
 lea dx,str16
 mov ah,9
 int 21h
+mov al,[QTY]  ;QTY
+inc al
+mov [QTY],al
  
 jmp ComboMenu                                                      
     ret
