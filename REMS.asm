@@ -7,14 +7,14 @@ org 100h
 .data
 
 s1 dw 10,13, "---------------------------------------------------------------$"
-s2 dw 10,13, "______                             _____ _                     $"
-s3 dw 10,13, "| ___ \                           /  ___| |                    $ "
-s4 dw 10,13, "| |_/ /_   _ _ __ __ _  ___ _ __  \ `--.| |_ ___  _ __         $ "
-s5 dw 10,13, "| ___ \ | | | '__/ _` |/ _ \ '__|  `--. \ __/ _ \| '_ \        $ "
-s6 dw 10,13, "| |_/ / |_| | | | (_| |  __/ |    /\__/ / || (_) | |_) |       $ "
-s7 dw 10,13, "\____/ \__,_|_|  \__, |\___|_|    \____/ \__\___/| .__/        $ "
-s8 dw 10,13, "                  __/ |                          | |           $ "
-s9 dw 10,13, "                 |___/                           |_|           $"
+s2 dw 10,13, "___  ___                    _      ______ _     _             $"
+s3 dw 10,13, "|  \/  |                   ( )     | ___ (_)   | |            $ "
+s4 dw 10,13, "| .  . | __ _ _ __ ___ ___ |/ ___  | |_/ /_ ___| |_ _ __ ___  $ "
+s5 dw 10,13, "| |\/| |/ _` | '__/ __/ _ \  / __| | ___ \ / __| __| '__/ _ \ $ "
+s6 dw 10,13, "| |  | | (_| | | | (_| (_) | \__ \ | |_/ / \__ \ |_| | | (_) |$ "
+s7 dw 10,13, "\_|  |_/\__,_|_|  \___\___/  |___/ \____/|_|___/\__|_|  \___/$ "
+s8 dw 10,13, "-------------------------------------------------------------$ "
+s9 dw 10,13, " Copyright@2020 https://github.com/ahsantahseen             $"
 
 s10 dw 10,13, "-------------------------------------------------------------$"
 s11 dw 10,13, "|                                                           |$"
@@ -85,7 +85,7 @@ fm19 dw 10,13, "|Enter Option:$"
 fm20 dw "                                                         |$"
 fm21 dw 10,13, "-------------------------------------------------------------------------$"
 
-esm21 dw 10,13, "-------------------------------------------------------------------------$"
+esm21 dw 10,13, "----------------------------------------------------------------------------------$"
 
 edc1 dw 10,13,"  ____                _               $"
 edc2 dw 10,13," / ___|___  _ __ ___ | |__   ___  ___ $"
@@ -116,7 +116,7 @@ inv8 dw 10,13,"|                                      |$"
 inv9 dw 10,13,"|  Total Amount:$"   
 inv9a dw "                    |$"
 inv10 dw 10,13,"|  Qty of Items:$"
-inv10a dw "                      |$"
+inv10a dw "                     |$"
 inv11 dw 10,13,"|                                      |$"
 inv12 dw 10,13,"|                                      |$"
 inv13 dw 10,13,"|                                      |$"
@@ -127,8 +127,8 @@ inv16 dw 10,13,"----------------------------------------$"
 
 NUM1 DB ?
 NUM2 DB ?
-TOTAL DB ?,"$" 
-QTY DB 0
+TOTAL DW 0 
+QTY DW 0
 
 
 
@@ -155,9 +155,10 @@ str14 dw 10,13,"|You have selected Party on! (4 Classic Fries and 2 Shakes)     
 str15 dw 10,13,"|You have selected See ya later (1 Burger any and 1 shake any)             |$"
 str16 dw 10,13,"|You have selected Peeza (3 Pizza Fries and 1 classic fries)               |$"
 
-str17 dw 10,13,"|Exiting Menu....                                                          |$"
+str17 dw 10,13,"|Exiting Menu....                                                    $"
 
-items dw 100 dup("$")
+RES  DB 10 DUP ('$')
+
 
 .code                  
                                                                       
@@ -636,16 +637,21 @@ InvoiceMenu Proc
     mov ah,9
     int 21h  
     ;Total Goes here
-    MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+
+
+    
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+    
+    
 mov dx,36
 mov ah,2
 int 21h
-
+    
     lea dx,inv9a
     mov ah,9
     int 21h
@@ -654,11 +660,17 @@ int 21h
     lea dx,inv10
     mov ah,9
     int 21h
-    ;QTY GOES HERE
-    mov dl,[QTY]
-    add dl,48
-    mov ah,2
-    int 21h
+    ;QTY GOES HERE 
+    MOV AX, QTY
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H 
+    
+    
+
+    
     
     lea dx,inv10a
     mov ah,9
@@ -691,9 +703,29 @@ int 21h
     jmp MainMenu
     ret
 
-InvoiceMenu EndP
+InvoiceMenu ENDP
 
-
+HEX2DEC PROC NEAR
+    MOV CX,0
+    MOV BX,10
+   
+LOOP1: MOV DX,0
+       DIV BX
+       ADD DL,30H
+       PUSH DX
+       INC CX
+       CMP AX,9
+       JG LOOP1
+     
+       ADD AL,30H
+       MOV [SI],AL
+     
+LOOP2: POP AX
+       INC SI
+       MOV [SI],AL
+       LOOP LOOP2
+       RET
+HEX2DEC ENDP
 
 
 
@@ -704,32 +736,26 @@ int 21h
 lea dx,gl21
 mov ah,9
 int 21h
-    
-    MOV AL,5 ; Price
-    
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
-
-    
- 
-  
     lea dx,gl22
 mov ah,9
 int 21h
+    
+    MOV BX,[TOTAL]
+    ADD BX,5;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+    
+ 
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    
+ 
+ 
+
 mov dx,36
 mov ah,2
 int 21h
@@ -743,9 +769,9 @@ lea dx,str1
 mov ah,9
 int 21h
 
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
     
 
 
@@ -764,28 +790,24 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,2 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,6;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
@@ -794,9 +816,10 @@ mov ah,9
 int 21h
 
 
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
 
  
 jmp BurgerMenu
@@ -811,37 +834,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,4 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
-int 21h
+int 21h  
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,4;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str3
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp BurgerMenu
     ret
@@ -855,37 +874,32 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,6 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,9;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str4
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp BurgerMenu
     ret
@@ -900,37 +914,32 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,3;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str5
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ShakeMenu
     ret
@@ -944,37 +953,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,4;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+ 
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str6
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ShakeMenu
     ret
@@ -988,28 +993,24 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-   MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,2;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h
@@ -1017,9 +1018,9 @@ int 21h
 lea dx,str7
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ShakeMenu
     ret
@@ -1033,28 +1034,24 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+    
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,6;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h
@@ -1062,9 +1059,9 @@ int 21h
 lea dx,str8
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ShakeMenu
     ret
@@ -1078,37 +1075,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+    
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,2;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str9
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp FriesMenu
     ret
@@ -1122,37 +1115,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+    
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,2;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+ 
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str10
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp FriesMenu
     ret
@@ -1166,37 +1155,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,15 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,2;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str11
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp FriesMenu
     ret    
@@ -1210,37 +1195,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,4 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+    
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,3;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str12
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp FriesMenu                                                      
     ret
@@ -1255,37 +1236,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,3 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+    
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,10;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+ 
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str13
 mov ah,9
-int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+int 21h     
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ComboMenu
     ret
@@ -1299,37 +1276,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,12;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+
+ 
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str14
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ComboMenu
     ret
@@ -1343,22 +1316,24 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,5 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
-
+ 
+    MOV BX,[TOTAL]
+    ADD BX,9;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+ 
+ 
 MOV AH,2
 MOV DL,BH
 INT 21H
@@ -1371,9 +1346,9 @@ int 21h
 lea dx,str15
 mov ah,9
 int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ComboMenu
     ret    
@@ -1387,37 +1362,33 @@ lea dx,gl21
 mov ah,9
 int 21h
 
-    MOV AL,4 ; Price
-    MOV NUM1,AL
-    MOV AL,TOTAL
-    ADD AL,NUM1
-    MOV TOTAL,AL
-    MOV AH,0
-    AAA
-    ADD AH,30H
-    ADD AL,30H
-    MOV BX,AX
+   
     
   
     lea dx,gl22
 mov ah,9
 int 21h
 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
+    MOV BX,[TOTAL]
+    ADD BX,15;PRICE
+    MOV [TOTAL],BX
+    MOV AX,TOTAL
+    LEA SI,RES
+    CALL HEX2DEC
+    LEA DX,RES
+    MOV AH,9
+    INT 21H
+ 
 mov dx,36
 mov ah,2
 int 21h 
 lea dx,str16
 mov ah,9
-int 21h
-mov al,[QTY]  ;QTY
-inc al
-mov [QTY],al
+int 21h   
+
+mov ax,[QTY]  ;QTY
+inc ax
+mov [QTY],ax
  
 jmp ComboMenu                                                      
     ret
