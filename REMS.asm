@@ -1,4 +1,4 @@
-;Burger Stop  
+
   
 org 100h
 
