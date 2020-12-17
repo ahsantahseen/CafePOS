@@ -26,8 +26,5 @@ components built in the program each having its own **functionality** , this wil
 achieved by making **PROC** functions in the program and then connecting them via
 **Jump** instructions.
 
-To further check the development progress please check the GitHub repository
-
-ahsantahseen/Order-System: An small order system made in assembly language on 8086 (github.com)
 
 
