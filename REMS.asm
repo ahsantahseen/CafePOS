@@ -1,4 +1,4 @@
-;Burger Stop  
+;Final Alpha 1.0  
   
 org 100h
 
@@ -6,7 +6,9 @@ org 100h
 .stack 100h
 .data
 
-s1 dw 10,13, "---------------------------------------------------------------$"
+;Front-End Design;
+
+s1 dw 10,13, "--------------------------------------------------------------$"
 s2 dw 10,13, "___  ___                    _      ______ _     _             $"
 s3 dw 10,13, "|  \/  |                   ( )     | ___ (_)   | |            $ "
 s4 dw 10,13, "| .  . | __ _ _ __ ___ ___ |/ ___  | |_/ /_ ___| |_ _ __ ___  $ "
@@ -15,17 +17,16 @@ s6 dw 10,13, "| |  | | (_| | | | (_| (_) | \__ \ | |_/ / \__ \ |_| | | (_) |$ "
 s7 dw 10,13, "\_|  |_/\__,_|_|  \___\___/  |___/ \____/|_|___/\__|_|  \___/$ "
 s8 dw 10,13, "-------------------------------------------------------------$ "
 s9 dw 10,13, " Copyright@2020 https://github.com/ahsantahseen             $"
-
-s10 dw 10,13, "-------------------------------------------------------------$"
+s10 dw 10,13, ".-----------------------------------------------------------.$"
 s11 dw 10,13, "|                                                           |$"
-s12 dw 10,13, "| 1.Order Bugers                                            |$"
-s13 dw 10,13, "| 2.Order Shakes                                            |$"
-s14 dw 10,13, "| 3.Order Fries                                             |$"
-es15 dw 10,13,"| 4.Exclusive Discounted Combos                             |$"
-es16 dw 10,13,"| 5.Generate Invoice                                        |$"
+s12 dw 10,13, "| 1.Order Bugers                          )                 |$"
+s13 dw 10,13, "| 2.Order Shakes                         ((                 |$"
+s14 dw 10,13, "| 3.Order Fries                         |""|-.              |$"
+es15 dw 10,13,"| 4.Exclusive Discounted Combos         |  :|/'              |$"
+es16 dw 10,13,"| 5.Generate Invoice                   -`--'-               |$"
 s15 dw 10,13, "| 6.Exit                                                    |$"
 s16 dw 10,13, "|                                                           |$"
-s17 dw 10,13, "-------------------------------------------------------------$"
+s17 dw 10,13, "'-----------------------------------------------------------'$"
 s18 dw 10,13, "|Enter Option:$"
 s19 dw "                                                         |$"
 s20 dw 10,13, "--------------------------------------------------------------------------$"
@@ -37,14 +38,16 @@ g5 dw 10,13,"| |_/ /| |_| || |   | (_| ||  __/| |      \__ \ | |  | ||  __/| | |
 g6 dw 10,13,"\____/  \__,_||_|    \__, | \___||_|      |___/ \_|  |_/ \___||_| |_| \__,_|$"
 g7 dw 10,13,"                      __/ |                                                 $"
 g8 dw 10,13,"                     |___/                                                  $"   
-gl11 dw 10,13, "-------------------------------------------------------------------------$"
-gl12 dw 10,13, "|                                                                        |$"
-gl13 dw 10,13, "| 1.Kentunky Burger                                                      |$"
-gl14 dw 10,13, "| 2.Crunchos                                                             |$"
-gl15 dw 10,13, "| 3.Messy Meat                                                           |$"
-gl16 dw 10,13, "| 4.Lava Dip                                                             |$"
-gl17 dw 10,13, "| 5.Exit                                                                 |$"
-gl18 dw 10,13, "|                                                                        |$"
+gl11 dw 10,13, ".------------------------------------------------------------------------$"
+gl12 dw 10,13, "|                                            _..----.._                  |$"
+gl13 dw 10,13, "| 1.Kentunky Burger                        .'     o    '.                |$"
+gl14 dw 10,13, "| 2.Crunchos                              /   o       o  \               |$"
+gl15 dw 10,13, "| 3.Messy Meat                           |o        o     o|              |$"
+gl16 dw 10,13, "| 4.Lava Dip                             /'-.._o     __.-'\              |$"
+gl17 dw 10,13, "| 5.Exit                                 \      `````     /              |$"
+gl18 dw 10,13, "|                                        |``--........--'`|              |$"
+gl18a dw 10,13,"|                                         \              /               |$"
+gl18b dw 10,13,"|                                          `'----------'`                |$"
 gl19 dw 10,13, "|Enter Option:$"                                                         
 gl20 dw "                                                         |$"
 gl21 dw 10,13, "-------------------------------------------------------------------------$"
@@ -57,13 +60,13 @@ sm4 dw 10,13," `--. \| '_ \  / _` || |/ / / _ \   / __| | |\/| | / _ \| '_ \ | |
 sm5 dw 10,13,"/\__/ /| | | || (_| ||   < |  __/   \__ \ | |  | ||  __/| | | || |_| |$"
 sm6 dw 10,13,"\____/ |_| |_| \__,_||_|\_\ \___|   |___/ \_|  |_/ \___||_| |_| \__,_|$"         
 sm11 dw 10,13, "-------------------------------------------------------------------------$"
-sm12 dw 10,13, "|                                                                        |$"
-sm13 dw 10,13, "| 1.KitKat Shake                                                         |$"
-sm14 dw 10,13, "| 2.Oreo Shake                                                           |$"
-sm15 dw 10,13, "| 3.Messy Chocolate Shake                                                |$"
-sm16 dw 10,13, "| 4.Strawberry Shake                                                     |$"
-sm17 dw 10,13, "| 5.Exit                                                                 |$"
-sm18 dw 10,13, "|                                                                        |$"
+sm12 dw 10,13, "|                                                 __                    |$"
+sm13 dw 10,13, "| 1.KitKat Shake                                  /                     |$"
+sm14 dw 10,13, "| 2.Oreo Shake                                 .-/-.                    |$"
+sm15 dw 10,13, "| 3.Messy Chocolate Shake                      |'-'|                    |$"
+sm16 dw 10,13, "| 4.Strawberry Shake                           |   |                    |$"
+sm17 dw 10,13, "| 5.Exit                                       |   |                    |$"
+sm18 dw 10,13, "|                                              \___/                    |$"
 sm19 dw 10,13, "|Enter Option:$"                                                         
 sm20 dw "                                                         |$"
 sm21 dw 10,13, "-------------------------------------------------------------------------$"
@@ -74,18 +77,18 @@ fm4 dw 10,13,"|  _|  | '__|| | / _ \/ __|   / __| | |\/| | / _ \| '_ \ | | | |  
 fm5 dw 10,13,"| |    | |   | ||  __/\__ \   \__ \ | |  | ||  __/| | | || |_| |           $"
 fm6 dw 10,13,"\_|    |_|   |_| \___||___/   |___/ \_|  |_/ \___||_| |_| \__,_|           $"         
 fm11 dw 10,13, "-------------------------------------------------------------------------$"
-fm12 dw 10,13, "|                                                                        |$"
-fm13 dw 10,13, "| 1.Classic Fries                                                        |$"
-fm14 dw 10,13, "| 2.Masala Fries                                                         |$"
-fm15 dw 10,13, "| 3.Nacho Cheese Fries                                                   |$"
-fm16 dw 10,13, "| 4.Pizza Fries                                                          |$"
-fm17 dw 10,13, "| 5.Exit                                                                 |$"
-fm18 dw 10,13, "|                                                                        |$"
+fm12 dw 10,13, "|                                      \|\ /| /|_/|//                    |$"
+fm13 dw 10,13, "| 1.Classic Fries                      |\||-|\||-/|/|                    |$"
+fm14 dw 10,13, "| 2.Masala Fries                       |\||-|\||-/|/|                    |$"
+fm15 dw 10,13, "| 3.Nacho Cheese Fries                  |||\\|/\\ ||                     |$"
+fm16 dw 10,13, "| 4.Pizza Fries                         | './\_/.' |                     |$"
+fm17 dw 10,13, "| 5.Exit                                |          |                     |$"
+fm18 dw 10,13, "|                                        '.______.'                      |$"
 fm19 dw 10,13, "|Enter Option:$"                                                         
 fm20 dw "                                                         |$"
 fm21 dw 10,13, "-------------------------------------------------------------------------$"
 
-esm21 dw 10,13, "----------------------------------------------------------------------------------$"
+esm21 dw 10,13, "------------------------------------------------------------------------$"
 
 edc1 dw 10,13,"  ____                _               $"
 edc2 dw 10,13," / ___|___  _ __ ___ | |__   ___  ___ $"
@@ -118,19 +121,21 @@ inv9a dw "                    |$"
 inv10 dw 10,13,"|  Qty of Items:$"
 inv10a dw "                     |$"
 inv11 dw 10,13,"|                                      |$"
-inv12 dw 10,13,"|                                      |$"
+inv12 dw 10,13,"| *All Prices are inclusive of taxes*  |$"
 inv13 dw 10,13,"|                                      |$"
 inv14 dw 10,13,"----------------------------------------$"
 inv15 dw 10,13,"Press any key to close......$"
 inv16 dw 10,13,"----------------------------------------$"                                                         
-                                                         
+
+
+;Main Airthmetic Variables;                                                         
 
 NUM1 DB ?
 NUM2 DB ?
 TOTAL DW 0 
 QTY DW 0
 
-
+;Secondary Lines for sub options;
 
 str1 dw 10,13,"|You have selected Kentunky Burger                                         |$"
 str2 dw 10,13,"|You have selected Crunchos                                                |$"
@@ -138,8 +143,8 @@ str3 dw 10,13,"|You have selected Messy Meat                                    
 str4 dw 10,13,"|You have selected Lava Dip                                                |$"
             
 
-str5 dw 10,13,"|You have selected Oreo Shake                                              |$"
-str6 dw 10,13,"|You have selected Kitkat Shake                                            |$"
+str6 dw 10,13,"|You have selected Oreo Shake                                              |$"
+str5 dw 10,13,"|You have selected Kitkat Shake                                            |$"
 str7 dw 10,13,"|You have selected Messy Chocolate Shake                                   |$"
 str8 dw 10,13,"|You have selected Strawberry Shake                                        |$"
 
@@ -157,6 +162,9 @@ str16 dw 10,13,"|You have selected Peeza (3 Pizza Fries and 1 classic fries)    
 
 str17 dw 10,13,"|Exiting Menu....                                                    $"
 
+
+;Resultant Array;
+
 RES  DB 10 DUP ('$')
 
 
@@ -170,7 +178,10 @@ mov ah,4ch
 int 21h
 
 Main EndP
-
+  
+  
+;Main Menu BackEnd;  
+  
 mainMenu Proc
 
 
@@ -248,7 +259,9 @@ call MMInput
  
 ret
        mainMenu EndP
-
+ 
+;Main Menu Input Handler; 
+ 
 MMinput Proc
     mov ah,1
     int 21h  
@@ -263,15 +276,23 @@ MMinput Proc
     cmp al,'5'
     je InvoiceMenu
     
+    
+    cmp al,13
+    je mainMenu
+    
     cmp al,'6' 
         lea dx,str17
-    mov ah,9
-    int 21h
-    je ExitProg
+        mov ah,9
+        int 21h
+    je ExitProg 
+    
+    
     ret
     MMinput EndP
 
 
+
+;Burger Menu Input Handler;
 
 P1input Proc
     mov ah,1
@@ -284,6 +305,10 @@ P1input Proc
     je AddBurger3
     cmp al,'4'
     je AddBurger4
+    
+    
+    cmp al,13 
+    je BurgerMenu
     cmp al,'5' 
      lea dx,str17
     mov ah,9   
@@ -291,7 +316,9 @@ P1input Proc
     je mainMenu
 
     ret 
-    P1input EndP
+    P1input EndP 
+
+;Burger Menu Backend;
 BurgerMenu Proc 
 
 lea dx,s20
@@ -351,6 +378,13 @@ int 21h
   
 lea dx,gl18
 mov ah,9
+int 21h  
+
+lea dx,gl18a
+mov ah,9
+int 21h
+lea dx,gl18b
+mov ah,9
 int 21h
 lea dx,gl19
 mov ah,9
@@ -360,6 +394,9 @@ call P1input
     ret
     BurgerMenu EndP
 
+
+
+;Shakes Menu Backend;
 
 Proc ShakeMenu
 
@@ -423,6 +460,8 @@ ret
     
     
     ShakeMenu EndP
+
+;Shakes Menu Input Handler;
     
 Proc P2input
     mov ah,1
@@ -435,6 +474,10 @@ Proc P2input
     je AddShake3
     cmp al,'4'
     je AddShake4
+    
+    
+    cmp al,13
+    je ShakeMenu
     cmp al,'5'
     lea dx,str17
     mov ah,9
@@ -443,6 +486,8 @@ Proc P2input
 
     ret
     P2input EndP    
+
+;Fries Menu Backed;
 
  Proc FriesMenu
 
@@ -507,6 +552,8 @@ ret
     
     FriesMenu EndP  
  
+;Fries Menu Input Handler; 
+ 
 Proc P3input
     mov ah,1
     int 21h 
@@ -518,6 +565,11 @@ Proc P3input
     je AddFries3
     cmp al,'4'
     je AddFries4
+    
+    
+    cmp al,13 
+    je FriesMenu   
+   
     cmp al,'5'
     lea dx,str17
     mov ah,9
@@ -527,6 +579,8 @@ Proc P3input
     ret
     P3input EndP
 
+
+;Combo Menu Backend;
 
 ComboMenu Proc
     lea dx,esm21
@@ -587,6 +641,8 @@ ret
 ComboMenu EndP
 
 
+;Combo Menu Input Handler;
+
 P4input Proc
     mov ah,1
     int 21h 
@@ -598,6 +654,8 @@ P4input Proc
     je AddCombo3
     cmp al,'4'
     je AddCombo4
+    cmp al,13
+    je ComboMenu
     cmp al,'5'
     lea dx,str17
     mov ah,9   
@@ -607,6 +665,8 @@ P4input Proc
     ret 
     P4input EndP
 
+
+;Invoice Menu Backend;
 
 InvoiceMenu Proc
     lea dx,inv1
@@ -655,7 +715,10 @@ int 21h
     lea dx,inv9a
     mov ah,9
     int 21h
-
+    
+    lea dx,inv11
+    mov ah,9
+    int 21h
     
     lea dx,inv10
     mov ah,9
@@ -705,6 +768,9 @@ int 21h
 
 InvoiceMenu ENDP
 
+
+;Primary Airthmetic Functions;
+
 HEX2DEC PROC NEAR
     MOV CX,0
     MOV BX,10
@@ -728,6 +794,7 @@ LOOP2: POP AX
 HEX2DEC ENDP
 
 
+;SubMenu Functions;
 
 AddBurger1 Proc
         lea dx,gl20
@@ -1333,13 +1400,6 @@ int 21h
     MOV AH,9
     INT 21H
  
- 
-MOV AH,2
-MOV DL,BH
-INT 21H
-MOV AH,2
-MOV DL,BL
-INT 21H 
 mov dx,36
 mov ah,2
 int 21h 
