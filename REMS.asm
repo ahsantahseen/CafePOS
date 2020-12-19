@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ;Final Alpha 1.0  
+=======
+
+>>>>>>> 8424f61d7fa35c8f454bde8e7d923b70b5353ee7
   
 org 100h
 
