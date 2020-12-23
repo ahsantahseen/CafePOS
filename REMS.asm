@@ -1,8 +1,7 @@
-<<<<<<< HEAD
-;Final Alpha 1.0  
-=======
 
->>>>>>> 8424f61d7fa35c8f454bde8e7d923b70b5353ee7
+;Final Alpha 1.0  
+
+
   
 org 100h
 
@@ -11,6 +10,21 @@ org 100h
 .data
 
 ;Front-End Design;
+
+
+login1 dw 10,13,"-----------------------------------------------------$"
+login2 dw 10,13,"  _                _         ____                  _ $"
+login3 dw 10,13," | |    ___   __ _(_)_ __   |  _ \ __ _ _ __   ___| |$"
+login4 dw 10,13," | |   / _ \ / _` | | '_ \  | |_) / _` | '_ \ / _ \ |$"
+login5 dw 10,13," | |__| (_) | (_| | | | | | |  __/ (_| | | | |  __/ |$"
+login6 dw 10,13," |_____\___/ \__, |_|_| |_| |_|   \__,_|_| |_|\___|_|$"
+login7 dw 10,13,"             |___/                                   $"
+login8 dw 10,13,"-----------------------------------------------------$"
+login9 dw 10,13, "Please use the correct credentials to access        $"
+login10 dw 10,13,"-----------------------------------------------------$"
+login11 dw 10,13,"ENTER USERNAME:$"
+login12 dw 10,13,"ENTER PASSWORD:$"
+
 
 s1 dw 10,13, "--------------------------------------------------------------$"
 s2 dw 10,13, "___  ___                    _      ______ _     _             $"
@@ -141,6 +155,14 @@ QTY DW 0
 
 ;Secondary Lines for sub options;
 
+loginS1 dw 10,13,"-----------------------------------------------------$"
+loginS2 dw 10,13,"----------     LOGIN SUCCESSFUL!        -------------$"
+loginS3 dw 10,13,"-----------------------------------------------------$"
+loginF1 dw 10,13,"-----------------------------------------------------$"
+loginF2 dw 10,13,"----------       LOGIN FAILED!          -------------$"
+loginF3 dw 10,13,"-----------------------------------------------------$"
+
+
 str1 dw 10,13,"|You have selected Kentunky Burger                                         |$"
 str2 dw 10,13,"|You have selected Crunchos                                                |$"
 str3 dw 10,13,"|You have selected Messy Meat                                              |$"
@@ -164,6 +186,7 @@ str14 dw 10,13,"|You have selected Party on! (4 Classic Fries and 2 Shakes)     
 str15 dw 10,13,"|You have selected See ya later (1 Burger any and 1 shake any)             |$"
 str16 dw 10,13,"|You have selected Peeza (3 Pizza Fries and 1 classic fries)               |$"
 
+
 str17 dw 10,13,"|Exiting Menu....                                                    $"
 
 
@@ -171,18 +194,125 @@ str17 dw 10,13,"|Exiting Menu....                                               
 
 RES  DB 10 DUP ('$')
 
+username db 'root $'
+password db 'toor $'
+
 
 .code                  
                                                                       
 Main Proc
 mov ax,@data
 mov ds,ax
-call mainMenu
+call loginPanel
 mov ah,4ch
 int 21h
 
 Main EndP
   
+
+;Login Panel Backend
+
+loginPanel Proc
+   
+   lea dx,login1
+   mov ah,9
+   int 21h
+   lea dx,login2
+   mov ah,9
+   int 21h
+   
+   lea dx,login3
+   mov ah,9
+   int 21h
+   
+   lea dx,login4
+   mov ah,9
+   int 21h
+   
+   lea dx,login5
+   mov ah,9
+   int 21h
+   
+   lea dx,login6
+   mov ah,9
+   int 21h
+   
+   lea dx,login7
+   mov ah,9
+   int 21h
+   
+   lea dx,login8
+   mov ah,9
+   int 21h
+   
+   lea dx,login9
+   mov ah,9
+   int 21h
+   lea dx,login10
+   mov ah,9
+   int 21h 
+   
+   lea dx,login11
+   mov ah,9
+   int 21h
+   mov bx,offset username
+   mov cx,4
+   ;Credential Verfication 
+
+   usernameVerification:
+   mov ah,1
+   int 21h
+   cmp al,[bx]
+   jne invalid
+   inc bx
+   loop usernameVerification
+   int 21h
+   mov bx,offset password
+   mov cx,4 
+   lea dx,login12
+   mov ah,9
+   int 21h
+   jmp passwordVerification
+   
+   passwordVerification:
+   mov ah,1
+   int 21h
+   cmp al,[bx]
+   jne invalid
+   inc bx
+   loop passwordVerification
+
+   lea dx,loginS1
+   mov ah,9
+   int 21h
+   lea dx,loginS2
+   mov ah,9
+   int 21h
+   lea dx,loginS3
+   mov ah,9
+   int 21h
+   jmp starter
+   
+   invalid:
+   
+   lea dx,loginF1
+   mov ah,9
+   int 21h
+   lea dx,loginF2
+   mov ah,9
+   int 21h
+   lea dx,loginF3
+   mov ah,9
+   int 21h
+   
+   
+   starter:
+   call mainMenu
+   
+   ret 
+   EndP loginPanel 
+
+
   
 ;Main Menu BackEnd;  
   
