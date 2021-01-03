@@ -275,11 +275,14 @@ loginPanel Proc
    jmp passwordVerification
    
    passwordVerification:
-   mov ah,1
+   mov ah,7
    int 21h
    cmp al,[bx]
    jne invalid
    inc bx
+   mov dl,'*'
+   mov ah,2
+   int 21h
    loop passwordVerification
 
    lea dx,loginS1
@@ -304,6 +307,7 @@ loginPanel Proc
    lea dx,loginF3
    mov ah,9
    int 21h
+   call loginPanel
    
    
    starter:
