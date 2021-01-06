@@ -901,7 +901,7 @@ int 21h
     lea dx,str17
     mov ah,9
     int 21h
-    jmp MainMenu
+    jmp MainMenu                                
     ret
 
 InvoiceMenu ENDP
@@ -955,11 +955,6 @@ int 21h
     MOV AH,9
     INT 21H
     
- 
-
-    
- 
- 
 
 mov dx,36
 mov ah,2
@@ -996,9 +991,7 @@ mov ah,9
 int 21h
 
    
-    
-  
-    lea dx,gl22
+lea dx,gl22
 mov ah,9
 int 21h
 
@@ -1453,10 +1446,10 @@ int 21h
     MOV [TOTAL],BX
     MOV AX,TOTAL
     LEA SI,RES
-    CALL HEX2DEC
-    LEA DX,RES
-    MOV AH,9
-    INT 21H
+        CALL HEX2DEC
+        LEA DX,RES
+        MOV AH,9
+        INT 21H
 
  
 mov dx,36
